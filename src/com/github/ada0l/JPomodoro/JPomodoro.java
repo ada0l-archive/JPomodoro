@@ -1,5 +1,7 @@
 package com.github.ada0l.JPomodoro;
 
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -82,6 +84,15 @@ public class JPomodoro {
 
         @Override
         public void onDone() {
+            Clip clip = new ResourceLoader().loadSound("done.wav");
+            if (clip != null && clip.isOpen()) {
+                clip.start();
+                clip.addLineListener(event -> {
+                    if(LineEvent.Type.STOP.equals(event.getType())) {
+                        clip.close();
+                    }
+                });
+            }
         }
     }
 }
